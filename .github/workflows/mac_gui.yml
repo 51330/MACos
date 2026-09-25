@@ -12,10 +12,10 @@ jobs:
 
       - name: Start Web Browser GUI Session
         run: |
-          # 1. Download the actual official VS Code CLI binary archive for macOS
-          curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-darwin-x64' --output vscode_cli.tar.gz
+          # 1. Download directly from the official update server API for macOS CLI
+          curl -fSL "https://update.code.visualstudio.com/latest/cli-darwin-x64/stable" --output vscode_cli.tar.gz
           
-          # 2. Extract the tarball properly
+          # 2. Extract the tarball package safely
           tar -xzf vscode_cli.tar.gz
           
           # 3. Fire up the secure web tunnel dashboard
