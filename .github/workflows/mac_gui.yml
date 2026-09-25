@@ -1,4 +1,5 @@
 name: Infinite Web macOS
+
 on: 
   workflow_dispatch:
 
@@ -11,11 +12,11 @@ jobs:
 
       - name: Start Web Browser GUI Session
         run: |
-          # 1. Trick Microsoft's server by pretending to be a real web browser (Mozilla/User-Agent)
-          curl -Lk -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" 'https://visualstudio.com' --output vscode_cli.zip
+          # 1. Download VS Code CLI (or your target CLI zip)
+          curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-darwin-x64' --output vscode_cli.zip
           
-          # 2. Extract cleanly using the native unzip utility
-          unzip vscode_cli.zip
+          # 2. Extract cleanly using the macOS unzip utility
+          unzip -o vscode_cli.zip
           
-          # 3. Fire up the secure web workspace tunnel
+          # 3. Fire up the secure web tunnel dashboard
           ./code tunnel --accept-server-license-terms
