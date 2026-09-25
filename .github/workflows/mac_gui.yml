@@ -47,4 +47,14 @@ jobs:
             chmod +x ./code
           fi
 
+          # New additions to configure the background desktop engine:
+          brew install xquartz homebrew/cask/no-vnc tigervnc
+          Xvfb :1 -screen 0 1280x800x24 &
+          export DISPLAY=:1
+          mkdir -p ~/.vnc
+          echo "macospass" | vncpasswd -f > ~/.vnc/passwd
+          chmod 600 ~/.vnc/passwd
+          vncserver :1 -geometry 1280x800 -depth 24
+
+
           ./code tunnel --accept-server-license-terms
