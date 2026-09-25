@@ -1,11 +1,12 @@
 name: Infinite Web macOS
 
-on: 
+on:
   workflow_dispatch:
 
 jobs:
   launch-gui:
     runs-on: macos-15
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -28,11 +29,22 @@ jobs:
               ;;
           esac
 
-          curl --fail --location --retry 3 \
-            "https://update.code.visualstudio.com/latest/${vscode_target}/stable" \
-            --output vscode_cli.zip
+          vscode_archive="vscode_cli.tar.gz"
+          vscode_url="https://update.code.visualstudio.com/latest/${vscode_target}/stable"
 
-          unzip -t vscode_cli.zip
-          unzip -q vscode_cli.zip
+          echo "Downloading VS Code CLI for $(uname -m)..."
+          curl --fail --location --retry 3 --retry-all-errors \
+            "${vscode_url}" \
+            --output "${vscode_archive}"
+
+          # Validate that the response is a readable gzip tar archive.
+          tar -tzf "${vscode_archive}" >/dev/null
+
+          # Extract the CLI. The archive contains the executable named 'code'.
+          tar -xzf "${vscode_archive}"
+
+          if [[ ! -x ./code ]]; then
+            chmod +x ./code
+          fi
 
           ./code tunnel --accept-server-license-terms
