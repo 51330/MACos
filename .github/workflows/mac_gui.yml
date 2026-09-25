@@ -11,9 +11,11 @@ jobs:
 
       - name: Start Web Browser GUI Session
         run: |
-          # 1. Install the official VS Code CLI binary
-          curl -Lk 'https://visualstudio.com' --output vscode_cli.tar.gz
-          tar -xf vscode_cli.tar.gz
+          # 1. Download the correct official macOS VS Code CLI zip archive
+          curl -Lk 'https://visualstudio.com' --output vscode_cli.zip
           
-          # 2. Fire up the direct secure web window (No Tunnel account required)
+          # 2. Unpack the zip using macOS native utility
+          unzip vscode_cli.zip
+          
+          # 3. Fire up the direct secure web window
           ./code tunnel --accept-server-license-terms
