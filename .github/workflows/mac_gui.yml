@@ -11,12 +11,28 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start Web Browser GUI Session
+        shell: bash
         run: |
-          # 1. Download directly from the official update server API for macOS CLI
-          curl -fSL "https://update.code.visualstudio.com/latest/cli-darwin-x64/stable" --output vscode_cli.tar.gz
-          
-          # 2. Extract the tarball package safely
-          tar -xzf vscode_cli.tar.gz
-          
-          # 3. Fire up the secure web tunnel dashboard
+          set -euo pipefail
+
+          case "$(uname -m)" in
+            arm64|aarch64)
+              vscode_target="cli-darwin-arm64"
+              ;;
+            x86_64)
+              vscode_target="cli-darwin-x64"
+              ;;
+            *)
+              echo "Unsupported macOS architecture: $(uname -m)" >&2
+              exit 1
+              ;;
+          esac
+
+          curl --fail --location --retry 3 \
+            "https://update.code.visualstudio.com/latest/${vscode_target}/stable" \
+            --output vscode_cli.zip
+
+          unzip -t vscode_cli.zip
+          unzip -q vscode_cli.zip
+
           ./code tunnel --accept-server-license-terms
