@@ -15,7 +15,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
+          sed -i '' 's/\r$//' "$0" 2>/dev/null || true
           case "$(uname -m)" in
             arm64|aarch64)
               vscode_target="cli-darwin-arm64"
