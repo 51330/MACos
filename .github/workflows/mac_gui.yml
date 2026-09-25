@@ -1,0 +1,19 @@
+name: Infinite Web macOS
+on: 
+  workflow_dispatch:
+
+jobs:
+  launch-gui:
+    runs-on: macos-15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Start Web Browser GUI Session
+        run: |
+          # 1. Install the official VS Code CLI binary
+          curl -Lk 'https://visualstudio.com' --output vscode_cli.tar.gz
+          tar -xf vscode_cli.tar.gz
+          
+          # 2. Fire up the direct secure web window (No Tunnel account required)
+          ./code tunnel --accept-server-license-terms
